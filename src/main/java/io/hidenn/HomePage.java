@@ -47,7 +47,7 @@ public class HomePage extends WebPage {
 	public HomePage(final PageParameters parameters) {
 		super(parameters);
 		Options options = new Options();
-		options.setTitle(new Title("My Chart"));
+		options.setTitle(new Title("Température"));
 
 		Axis xAxis = new Axis();
 		xAxis.setCategories(Arrays.asList(
@@ -60,7 +60,7 @@ public class HomePage extends WebPage {
 		plotLines.setColor(new HexColor("#999999"));
 
 		Axis yAxis = new Axis();
-		yAxis.setTitle(new Title("Temperature (��C)"));
+		yAxis.setTitle(new Title("Temperature (C)"));
 		yAxis.setPlotLines(Collections.singletonList(plotLines));
 		options.setyAxis(yAxis);
 
@@ -110,7 +110,7 @@ public class HomePage extends WebPage {
 			@Override
 			public void onClick() {
 
-				String sourceFileName = "/Users/Alex/Documents/JavaProject/testJasperMvn/templates/template.jasper";
+				String sourceFileName = "src/main/webapp/templates/template.jasper";
 
 				DefaultTableModel tableModel = HomePage.TableModelData();
 				JRDataSource dataSource = new JRTableModelDataSource(tableModel);
@@ -119,7 +119,7 @@ public class HomePage extends WebPage {
 
 				Image img = null;
 				try {
-					img = ImageIO.read(new File("/Users/Alex/Documents/JavaProject/testJasperMvn/templates/aquasys.gif"));
+					img = ImageIO.read(new File("src/main/webapp/img/aquasys.gif"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -133,7 +133,7 @@ public class HomePage extends WebPage {
 					System.out.println("Export to PDF ...");
 					JasperPrint print = JasperFillManager.fillReport(
 							sourceFileName, params, dataSource);
-					JasperExportManager.exportReportToPdfFile(print, "/Users/Alex/Documents/JavaProject/testPdjWicket/src/main/webapp/output.pdf");
+					JasperExportManager.exportReportToPdfFile(print, "src/main/webapp/output.pdf");
 					setResponsePage(new RedirectPage("http://localhost:8080/output.pdf"));
 				} catch (JRException e) {
 					e.printStackTrace();
