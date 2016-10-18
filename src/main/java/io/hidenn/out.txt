@@ -1,0 +1,35 @@
+Button pdfButton = new Button("pdf") {
+			@Override
+			public void onSubmit() {
+				String sourceFileName = "/Users/Alex/Documents/JavaProject/testJasperMvn/templates/template.jasper";
+
+				DefaultTableModel tableModel = HomePage.TableModelData();
+				JRDataSource dataSource = new JRTableModelDataSource(tableModel);
+
+				Map params = new HashMap();
+
+				Image img = null;
+				try {
+					img = ImageIO.read(new File("/Users/Alex/Documents/JavaProject/testJasperMvn/templates/aquasys.gif"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				params.put("image", img);
+				params.put("ReportTitle", "List of Contacts");
+				params.put("author", "Prepared By Alexandre");
+				params.put("description", "Ce PDF à été généré grace à Jasper, à partir d'un code Java");
+
+				try {
+					System.out.println("Export to PDF ...");
+					JasperPrint print = JasperFillManager.fillReport(
+							sourceFileName, params, dataSource);
+					JasperExportManager.exportReportToPdfFile(print, "/Users/Alex/Documents/JavaProject/testJasperMvn/templates/output.pdf");
+
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+
+		add(pdfButton);
