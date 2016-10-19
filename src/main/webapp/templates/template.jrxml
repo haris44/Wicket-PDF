@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2016-10-19T17:24:19 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6535cec9-34e2-4fc5-908c-252f4354f051">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="ReportTitle" class="java.lang.String"/>
+	<parameter name="author" class="java.lang.String"/>
+	<parameter name="description" class="java.lang.String"/>
+	<parameter name="graph" class="java.awt.Image"/>
+	<parameter name="logo" class="java.awt.Image"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="country" class="java.lang.String">
+		<fieldDescription><![CDATA[country]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="110" width="535" height="20" backcolor="#70A9A9" uuid="5fad1687-d2e9-43bf-a46f-dd098c2589c6"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="113" width="121" height="15" uuid="57155441-fb47-4b5d-988d-6997832a62c9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Country]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="115" width="136" height="15" uuid="fd5c3698-197b-427a-9193-00427b804c0d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="18" y="20" width="100" height="30" uuid="82bc4d1c-cb85-48d2-8c57-47e33e3985b4"/>
+				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="380" y="10" width="130" height="50" uuid="d9c7150e-cdd7-4c07-b4e8-949e4bd87af8"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="10" y="66" width="525" height="40" uuid="9bc9d305-bf8c-4e87-8a1b-bfb10d1a68c1"/>
+				<textFieldExpression><![CDATA[$P{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="300" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="15" backcolor="#E5ECF9" uuid="17f486dd-8f7c-416d-b870-109dfa967147"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="414" y="0" width="121" height="15" uuid="159bd71a-1b1a-4671-8ee5-5320dab8214c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="136" height="15" uuid="bb674450-e35f-40cc-8ad9-a2a883bb23a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="270" width="100" height="30" uuid="83394be7-9c45-4d2b-b611-93d35ff3fd1d"/>
+				<textFieldExpression><![CDATA[$P{author}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="100" width="547" height="140" uuid="832e5970-fa06-4e05-809c-f28bcd01e0f2"/>
+				<imageExpression><![CDATA[$P{graph}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>
