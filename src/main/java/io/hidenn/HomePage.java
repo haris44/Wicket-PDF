@@ -6,33 +6,29 @@ import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import com.googlecode.wickedcharts.highcharts.options.series.SimpleSeries;
 import com.googlecode.wickedcharts.wicket7.highcharts.Chart;
 
-
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+
 import org.apache.log4j.Logger;
-import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.pages.RedirectPage;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.target.resource.ResourceStreamRequestTarget;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.file.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Image;
-import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,6 +42,67 @@ public class HomePage extends WebPage {
 
 	public HomePage(final PageParameters parameters) {
 		super(parameters);
+
+		add(generateChart());
+		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
+
+		// CREATE JS CALLBACK
+		final AbstractDefaultAjaxBehavior click = new AbstractDefaultAjaxBehavior(){
+			@Override
+			protected void respond(AjaxRequestTarget ajaxRequestTarget) {
+				IRequestParameters x = RequestCycle.get().getRequest().getPostParameters();
+				String imgBase = x.getParameterValue("base").toString();
+				String base64Image = imgBase.split(",")[1];
+				byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+
+				BufferedImage img = null;
+				Image logo = null;
+				try {
+					img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+					logo = ImageIO.read(new File("src/main/webapp/img/aquasys.gif"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				String sourceFileName = "src/main/webapp/templates/rapportTemp.jasper";
+
+				DefaultTableModel tableModel = HomePage.tableModelData();
+				JRDataSource dataSource = new JRTableModelDataSource(tableModel);
+
+				Map params = new HashMap();
+
+				params.put("graph", img);
+				params.put("logo", logo);
+				params.put("ReportTitle", "List of Contacts");
+				params.put("author", "Prepared By Alexandre");
+				params.put("description", "Ce PDF à été généré grace à Jasper, à partir d'un code Java");
+
+				try {
+					System.out.println("Export to PDF ...");
+					JasperPrint print = JasperFillManager.fillReport(
+							sourceFileName, params, dataSource);
+					JasperExportManager.exportReportToPdfFile(print, "src/main/webapp/output.pdf");
+					setResponsePage(new RedirectPage("http://localhost:8080/output.pdf"));
+				} catch (JRException e) {
+					logger.error(e);
+				}
+			}
+		};
+
+		// CREATE LINK
+		Link<Void> sub = new BookmarkablePageLink<Void>("sub", HomePage.class) {
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				tag.put("onclick", "window.getCharts('"+ click.getCallbackUrl() +"')");
+			}
+		};
+
+		add(sub);
+		add(click);
+
+	}
+
+	private static Chart generateChart(){
 		Options options = new Options();
 		options.setTitle(new Title("Température"));
 
@@ -98,52 +155,10 @@ public class HomePage extends WebPage {
 		options.addSeries(series4);
 
 
-		Chart theChart = new Chart("chart", options);
-
-		StringValue temp = RequestCycle.get().getRequest().getQueryParameters().getParameterValue("test");
-		logger.info(temp.toString());
-
-		add(theChart);
-		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
-
-		Link pdfButton = new Link("pdf") {
-			@Override
-			public void onClick() {
-
-				String sourceFileName = "src/main/webapp/templates/template.jasper";
-
-				DefaultTableModel tableModel = HomePage.TableModelData();
-				JRDataSource dataSource = new JRTableModelDataSource(tableModel);
-
-				Map params = new HashMap();
-
-				Image img = null;
-				try {
-					img = ImageIO.read(new File("src/main/webapp/img/aquasys.gif"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				params.put("image", img);
-				params.put("ReportTitle", "List of Contacts");
-				params.put("author", "Prepared By Alexandre");
-				params.put("description", "Ce PDF à été généré grace à Jasper, à partir d'un code Java");
-
-				try {
-					System.out.println("Export to PDF ...");
-					JasperPrint print = JasperFillManager.fillReport(
-							sourceFileName, params, dataSource);
-					JasperExportManager.exportReportToPdfFile(print, "src/main/webapp/output.pdf");
-					setResponsePage(new RedirectPage("http://localhost:8080/output.pdf"));
-				} catch (JRException e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		add(pdfButton);
+		return new Chart("chart", options);
 	}
 
-	private static DefaultTableModel TableModelData() {
+	private static DefaultTableModel tableModelData() {
 		String[] columnNames = {"name", "country"};
 		String[][] data = {
 				{"G Conger", " Orthopaedic"}, {"klnjhjg", "kjhgjvj"},
