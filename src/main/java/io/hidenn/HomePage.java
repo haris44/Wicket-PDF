@@ -43,7 +43,16 @@ public class HomePage extends WebPage {
 	public HomePage(final PageParameters parameters) {
 		super(parameters);
 
-		add(generateChart());
+		final String[] columnsData = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"};
+		final HashMap<String, Double[]> dataMap = new HashMap<>();
+
+		dataMap.put("Tokyo", new java.lang.Double[]{7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9});
+		dataMap.put("NewYork",  new java.lang.Double[]{0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6});
+		dataMap.put("Berlin", new java.lang.Double[]{0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9});
+
+
+
+		add(generateChart(columnsData, dataMap));
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
 
 		// CREATE JS CALLBACK
@@ -97,18 +106,27 @@ public class HomePage extends WebPage {
 			}
 		};
 
+
+		Link xlsButton = new Link("xls") {
+			@Override
+			public void onClick() {
+				new XlsGenerator("src/main/webapp/output.xls", columnsData, dataMap);
+				setResponsePage(new RedirectPage("http://localhost:8080/output.xls"));
+			}
+		};
+
 		add(sub);
+		add(xlsButton);
 		add(click);
 
 	}
 
-	private static Chart generateChart(){
+	private static Chart generateChart(String[] columnsData, HashMap<String, Double[]> dataMap){
 		Options options = new Options();
 		options.setTitle(new Title("Température"));
 
 		Axis xAxis = new Axis();
-		xAxis.setCategories(Arrays.asList(
-				new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
+		xAxis.setCategories(Arrays.asList(columnsData));
 		options.setxAxis(xAxis);
 
 		PlotLine plotLines = new PlotLine();
@@ -130,30 +148,16 @@ public class HomePage extends WebPage {
 		legend.setBorderWidth(0);
 		options.setLegend(legend);
 
-		Series<Number> series1 = new SimpleSeries();
-		series1.setName("Tokyo");
-		series1.setData(Arrays
-				.asList(new Number[]{7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
-		options.addSeries(series1);
+		for (Map.Entry<String, Double[]> entry : dataMap.entrySet()) {
+			String key = entry.getKey();
+			Number[] value = entry.getValue();
 
-		Series<Number> series2 = new SimpleSeries();
-		series2.setName("New York");
-		series2.setData(Arrays
-				.asList(new Number[]{-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5}));
-		options.addSeries(series2);
-
-		Series<Number> series3 = new SimpleSeries();
-		series3.setName("Berlin");
-		series3.setData(Arrays
-				.asList(new Number[]{-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0}));
-		options.addSeries(series3);
-
-		Series<Number> series4 = new SimpleSeries();
-		series4.setName("London");
-		series4.setData(Arrays
-				.asList(new Number[]{3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8}));
-		options.addSeries(series4);
-
+			Series<Number> series = new SimpleSeries();
+			series.setName(key);
+			series.setData(Arrays
+					.asList(value));
+			options.addSeries(series);
+		}
 
 		return new Chart("chart", options);
 	}
