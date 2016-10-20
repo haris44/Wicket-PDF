@@ -16,23 +16,30 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.pages.RedirectPage;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.file.File;
+import org.wicketstuff.openlayers3.DefaultOpenLayersMap;
+import org.wicketstuff.openlayers3.api.Map;
+import org.wicketstuff.openlayers3.api.View;
+import org.wicketstuff.openlayers3.api.coordinate.Coordinate;
+import org.wicketstuff.openlayers3.api.layer.Layer;
+import org.wicketstuff.openlayers3.api.layer.Tile;
+import org.wicketstuff.openlayers3.api.source.tile.Osm;
 
 import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+
 
 @SuppressWarnings("unchecked")
 public class HomePage extends WebPage {
@@ -50,10 +57,14 @@ public class HomePage extends WebPage {
 		dataMap.put("NewYork",  new java.lang.Double[]{0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6});
 		dataMap.put("Berlin", new java.lang.Double[]{0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9});
 
-
-
 		add(generateChart(columnsData, dataMap));
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
+
+
+		add(new DefaultOpenLayersMap("map",
+				Model.of(new Map(Arrays.<Layer>asList(
+						new Tile("Open Street Maps", new Osm())),
+						new View(new Coordinate(0, 0), 2)))));
 
 		// CREATE JS CALLBACK
 		final AbstractDefaultAjaxBehavior click = new AbstractDefaultAjaxBehavior(){
@@ -64,10 +75,17 @@ public class HomePage extends WebPage {
 				String base64Image = imgBase.split(",")[1];
 				byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 
+				String mapBase = x.getParameterValue("map").toString();
+				String base64Map = mapBase.split(",")[1];
+				byte[] mapBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Map);
+
 				BufferedImage img = null;
-				Image logo = null;
+				BufferedImage logo = null;
+				BufferedImage map = null;
+
 				try {
 					img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+					map = ImageIO.read(new ByteArrayInputStream(mapBytes));
 					logo = ImageIO.read(new File("src/main/webapp/img/aquasys.gif"));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -78,9 +96,10 @@ public class HomePage extends WebPage {
 				DefaultTableModel tableModel = HomePage.tableModelData();
 				JRDataSource dataSource = new JRTableModelDataSource(tableModel);
 
-				Map params = new HashMap();
+				HashMap params = new HashMap();
 
 				params.put("graph", img);
+				params.put("map", map);
 				params.put("logo", logo);
 				params.put("ReportTitle", "List of Contacts");
 				params.put("author", "Prepared By Alexandre");
@@ -103,9 +122,9 @@ public class HomePage extends WebPage {
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				tag.put("onclick", "window.getCharts('"+ click.getCallbackUrl() +"')");
+
 			}
 		};
-
 
 		Link xlsButton = new Link("xls") {
 			@Override
@@ -148,7 +167,7 @@ public class HomePage extends WebPage {
 		legend.setBorderWidth(0);
 		options.setLegend(legend);
 
-		for (Map.Entry<String, Double[]> entry : dataMap.entrySet()) {
+		for (HashMap.Entry<String, Double[]> entry : dataMap.entrySet()) {
 			String key = entry.getKey();
 			Number[] value = entry.getValue();
 

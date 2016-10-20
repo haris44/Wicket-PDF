@@ -38,6 +38,23 @@
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.wicked-charts:wicked-charts-wicket7:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.wicked-charts:highcharts-wrapper:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.wicketstuff:wicketstuff-core:7.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.wicketstuff:wicketstuff-openlayers3:7.4.0" level="project" />
+    <orderEntry type="library" name="Maven: de.agilecoders.wicket.webjars:wicket-webjars:0.5.3" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:openlayers:3.10.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wicketstuff:wicketstuff-openlayers3-bootstrap:7.4.0" level="project" />
+    <orderEntry type="library" name="Maven: de.agilecoders.wicket:wicket-bootstrap-core:0.10.0" level="project" />
+    <orderEntry type="library" name="Maven: de.agilecoders.wicket:jquery-selectors:0.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:bootstrap:3.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery:1.11.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:modernizr:2.8.3" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
+    <orderEntry type="library" name="Maven: de.agilecoders.maven:maven-parent-config:0.3.5" level="project" />
+    <orderEntry type="library" name="Maven: org.wicketstuff:wicketstuff-annotation:7.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:4.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jasperreports:jasperreports:6.1.0" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
@@ -63,7 +80,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:3.0.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:3.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-asm:3.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.4" level="project" />

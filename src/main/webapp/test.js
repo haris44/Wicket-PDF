@@ -1,7 +1,7 @@
 window.onload = () => {
 	window.getCharts = (urlCallback) => {
 		console.log(Highcharts);
-		chart =  $("#chart1").highcharts()
+		chart =  $("#chart").highcharts()
 		var chartSVG = chart.getSVG({
 			exporting: {
 				sourceWidth: chart.chartWidth,
@@ -15,7 +15,11 @@ window.onload = () => {
         canvg(canvas, chartSVG)
 		graph = canvas.toDataURL('image/jpg');
 
-		Wicket.Ajax.post({ ep : {base : graph}, u: urlCallback});
+        canvas = document.getElementById("map").getElementsByTagName("canvas")[0]
+        map = canvas.toDataURL('image/jpg');
+
+		Wicket.Ajax.post({ ep : {base : graph, map : map}, u: urlCallback});
 
 	}
+
 }
